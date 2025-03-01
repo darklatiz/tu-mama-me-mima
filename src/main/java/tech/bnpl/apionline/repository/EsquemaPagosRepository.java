@@ -7,6 +7,6 @@ import tech.bnpl.apionline.model.EsquemaPago;
 import java.util.List;
 
 @Repository
-public interface EsquemaPagosRepository extends JpaRepository<EsquemaPago, Long> {
+public interface EsquemaPagosRepository extends JpaRepository<EsquemaPago, Integer> {
     List<EsquemaPago> findByHabilitado(boolean habilitado);
 }

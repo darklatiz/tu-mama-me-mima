@@ -1,6 +1,5 @@
 package tech.bnpl.apionline.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,11 @@ import java.util.Map;
 @RequestMapping("/api/esquemas")
 public class EsquemaController {
 
-    @Autowired
-    private EsquemaValidationService esquemaValidationService;
+    private final EsquemaValidationService esquemaValidationService;
+
+    public EsquemaController(EsquemaValidationService esquemaValidationService) {
+        this.esquemaValidationService = esquemaValidationService;
+    }
 
     @PostMapping("/recargar-cache")
     public ResponseEntity<String> recargarCache() {

@@ -28,5 +28,5 @@
     <!-- Logging específico para paquetes -->
     <logger name="org.springframework" level="info" />
     <logger name="org.hibernate.SQL" level="debug" />
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" />
+<!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" />-->
 </configuration>

@@ -7,15 +7,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,13 +38,15 @@ public class LineaCredito {
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
-    @Column(name = "monto_asignado", nullable = false)
+    @Column(name = "monto_asignado", nullable = false, columnDefinition = "NUMERIC(10,2)")
     private Double montoAsignado;
 
     @Column(name = "fecha_registro", nullable = false)
-    private Date fechaRegistro;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime fechaRegistro;
 
     @Column(name = "fecha_actualizacion")
-    private Date fechaActualizacion;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime fechaActualizacion;
 }
 

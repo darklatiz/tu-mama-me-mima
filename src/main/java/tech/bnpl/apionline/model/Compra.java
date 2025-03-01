@@ -8,14 +8,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -36,11 +41,12 @@ public class Compra {
     private EsquemaPago esquemaPago;
 
     @Column(name = "fecha_compra", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCompra;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "NUMERIC(10,2)")
     private Double monto;
 
-    @Column(name = "monto_comision", nullable = false)
+    @Column(name = "monto_comision", nullable = false, columnDefinition = "NUMERIC(10,2)")
     private Double montoComision;
 }

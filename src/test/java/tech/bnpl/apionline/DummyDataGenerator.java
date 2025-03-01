@@ -1,8 +1,13 @@
 package tech.bnpl.apionline;
 
+import tech.bnpl.apionline.model.Cliente;
 import tech.bnpl.apionline.model.CondicionRegla;
 import tech.bnpl.apionline.model.EsquemaPago;
+import tech.bnpl.apionline.model.LineaCredito;
+import tech.bnpl.apionline.model.request.ClienteRequest;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,7 +22,7 @@ public class DummyDataGenerator {
     /**
      * Genera una lista de esquemas de pago con datos aleatorios, asegurando una cantidad específica de habilitados.
      *
-     * @param cantidad Número total de esquemas a generar.
+     * @param cantidad       Número total de esquemas a generar.
      * @param habilitadosMin Número mínimo de esquemas habilitados.
      * @return Lista de EsquemaPagos.
      */
@@ -32,14 +37,14 @@ public class DummyDataGenerator {
             String frecuenciaCobro = obtenerFrecuenciaAleatoria();
             String nombre = generarNombreEsquema(baseName, numeroPagos, frecuenciaCobro);
             EsquemaPago esquemaPago = EsquemaPago.builder()
-                    .id((long) (i + 1))
-                    .nombre(nombre)
-                    .numeroPagos(numeroPagos)
-                    .frecuenciaCobro(frecuenciaCobro)
-                    .tasa(RANDOM.nextDouble() * 5) // tasa netre 0.0 y 5.0
-                    .habilitado(true)
-                    .condiciones(DummyDataGenerator.generarCondicionesRandom(RANDOM.nextInt(5) + 1))
-                    .build();
+              .id((i + 1))
+              .nombre(nombre)
+              .numeroPagos(numeroPagos)
+              .frecuenciaCobro(frecuenciaCobro)
+              .tasa(RANDOM.nextDouble() * 5) // tasa netre 0.0 y 5.0
+              .habilitado(true)
+              .condiciones(DummyDataGenerator.generarCondicionesRandom(RANDOM.nextInt(5) + 1))
+              .build();
             esquemas.add(esquemaPago);
         }
 
@@ -51,14 +56,14 @@ public class DummyDataGenerator {
             String frecuenciaCobro = obtenerFrecuenciaAleatoria();
             String nombre = generarNombreEsquema(baseName, numeroPagos, frecuenciaCobro);
             EsquemaPago esquemaPago = EsquemaPago.builder()
-                    .id((long) (i + 1))
-                    .nombre(nombre)
-                    .numeroPagos(numeroPagos)
-                    .frecuenciaCobro(frecuenciaCobro)
-                    .tasa(RANDOM.nextDouble() * 5) // tasa netre 0.0 y 5.0
-                    .habilitado(RANDOM.nextBoolean())
-                    .condiciones(DummyDataGenerator.generarCondicionesRandom(RANDOM.nextInt(5) + 1))
-                    .build();
+              .id((i + 1))
+              .nombre(nombre)
+              .numeroPagos(numeroPagos)
+              .frecuenciaCobro(frecuenciaCobro)
+              .tasa(RANDOM.nextDouble() * 5) // tasa netre 0.0 y 5.0
+              .habilitado(RANDOM.nextBoolean())
+              .condiciones(DummyDataGenerator.generarCondicionesRandom(RANDOM.nextInt(5) + 1))
+              .build();
             esquemas.add(esquemaPago);
         }
 
@@ -101,12 +106,12 @@ public class DummyDataGenerator {
 
         for (int i = 0; i < cantidad; i++) {
             CondicionRegla condicionRegla = CondicionRegla.builder()
-                    .id((long) (i + 1))
-                    .clave(CLAVES[RANDOM.nextInt(CLAVES.length)])
-                    .valor(String.valueOf(RANDOM.nextInt(100) + 1))
-                    .habilitado(RANDOM.nextBoolean())
-                    .operador(OPERADORES[RANDOM.nextInt(OPERADORES.length)])
-                    .build();
+              .id((i + 1))
+              .clave(CLAVES[RANDOM.nextInt(CLAVES.length)])
+              .valor(String.valueOf(RANDOM.nextInt(100) + 1))
+              .habilitado(RANDOM.nextBoolean())
+              .operador(OPERADORES[RANDOM.nextInt(OPERADORES.length)])
+              .build();
             condiciones.add(condicionRegla);
         }
 
@@ -124,5 +129,40 @@ public class DummyDataGenerator {
      */
     public static String generarNombreEsquema(String baseName, int numeroPagos, String frecuenciaCobro) {
         return String.format("%s_%d_%s", baseName.toUpperCase(), numeroPagos, frecuenciaCobro.toUpperCase());
+    }
+
+    public static ClienteRequest getClienteRequest() {
+        return ClienteRequest.builder()
+          .idCliente(1L)
+          .nombre("Test")
+          .apMaterno("apmaterno")
+          .apPaterno("appaterno")
+          .fechaNacimiento("2000/03/12")
+          .build();
+    }
+
+    public static Cliente getCliente() {
+        LocalDateTime now = LocalDateTime.now();
+        Cliente cliente = Cliente.builder()
+          .id(1L)
+          .nombre("Test")
+          .apMaterno("apmaterno")
+          .apPaterno("appaterno")
+          .fechaNacimiento(LocalDate.of(2000, 3, 12))
+          .build();
+
+        LineaCredito lineaCredito = LineaCredito.builder()
+          .montoAsignado(5000.0)
+          .cliente(cliente)
+          .fechaActualizacion(now)
+          .fechaRegistro(now)
+          .id(1L)
+          .build();
+
+        cliente.setLineasCredito(List.of(lineaCredito));
+
+        return cliente;
+
+
     }
 }
