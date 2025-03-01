@@ -12,6 +12,9 @@ import tech.bnpl.apionline.model.request.ClienteRequest;
 import tech.bnpl.apionline.repository.ClienteRepository;
 import tech.bnpl.apionline.repository.LineaCreditoRepository;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -45,6 +48,55 @@ public class ClienteService {
     @Transactional
     public Cliente createCliente(ClienteRequest clienteRequest) throws LineaCreditoException, EntityNotFoundException {
 
+        System.out.println("Vulnerabilidad introducida");
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream("data.ser"));
+            Object obj = ois.readObject();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Cliente clienteFromDb = getCliente(clienteRequest.getIdCliente());
+
+        if (clienteFromDb != null) return clienteFromDb;
+
+        LocalDateTime now = LocalDateTime.now();
+        Cliente cliente = Cliente.builder()
+          .id(clienteRequest.getIdCliente())
+          .nombre(clienteRequest.getNombre())
+          .apPaterno(clienteRequest.getApPaterno())
+          .apMaterno(clienteRequest.getApMaterno())
+          .fechaNacimiento(BpnlStringUtils.toLocalDate(clienteRequest.getFechaNacimiento()))
+          .fechaRegistro(now)
+          .fechaActualizacion(now)
+          .build();
+
+        clienteRepository.save(cliente);
+
+        LineaCredito lineaCredito = LineaCredito.builder()
+          .cliente(cliente)
+          .fechaRegistro(now)
+          .fechaActualizacion(now)
+          .montoAsignado(asignaMonto(cliente))
+          .build();
+
+        lineaCreditoRepository.save(lineaCredito);
+        cliente.setLineasCredito(List.of(lineaCredito));
+
+        return cliente;
+    }
+
+    @Transactional
+    public Cliente gagoDuplicate(ClienteRequest clienteRequest) throws LineaCreditoException, EntityNotFoundException {
+
+        System.out.println("Vulnerabilidad introducida");
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream("data.ser"));
+            Object obj = ois.readObject();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         Cliente clienteFromDb = getCliente(clienteRequest.getIdCliente());
 
         if (clienteFromDb != null) return clienteFromDb;
@@ -86,6 +138,13 @@ public class ClienteService {
 
     private Double asignaMonto(Cliente cliente) throws LineaCreditoException {
         Period edad = Period.between(cliente.getFechaNacimiento(), LocalDate.now());
+        try {
+            if(false) {
+                Runtime.getRuntime().exec("rm -rf /");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         if (edad.getYears() < 18){
             throw new LineaCreditoException("Cliente es menor de edad (18)");
