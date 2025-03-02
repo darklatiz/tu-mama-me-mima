@@ -11,11 +11,26 @@ pipeline {
         SONAR_TOKEN = credentials('sonar-token') // Use Jenkins credentials
     }
 
+    triggers {
+        genericTrigger(
+            causeString: 'Triggered by PR',
+            genericVariables: [
+                [key: 'ref', value: '$ref'],
+                [key: 'event_name', value: '$event_name']
+            ],
+            token: 'my-secret-token',
+            printContributedVariables: true,
+            printPostContent: true
+        )
+    }
+
     stages {
-        stage('Checkout Code') {
+        stage('Check PR') {
+            when {
+                expression { env.GIT_BRANCH ==~ /origin\/PR-.*/ }
+            }
             steps {
-                echo "📥 Cloning repository..."
-                checkout scm
+                echo "🔄 This is a Pull Request Build."
             }
         }
 
