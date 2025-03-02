@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    options {
+        ansiColor('xterm')
+    }
+
     environment {
         SONAR_PROJECT_KEY = "TuMamaMeMima"
         SONAR_HOST_URL = "http://20.42.91.75:9000"
