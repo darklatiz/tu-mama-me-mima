@@ -7,8 +7,6 @@ pipeline {
 
     environment {
         SONAR_PROJECT_KEY = "TuMamaMeMima"
-        SONAR_HOST_URL = "http://20.42.91.75:9000"
-        SONAR_TOKEN = credentials('sonar-token') // Use Jenkins credentials
     }
 
     triggers {
@@ -48,17 +46,30 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                echo "📊 Running Super SonarQube analysis..."
-                sh """
-                    mvn -B sonar:sonar \
-                        -Dsonar.dependencyCheck.summarize=true \
-                        -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json \
-                        -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml \
-                        -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html \
-                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                        -Dsonar.host.url=${SONAR_HOST_URL} \
-                        -Dsonar.login=${SONAR_TOKEN}
-                """
+                echo "📊 Running NEW Super SonarQube analysis..."
+                withSonarQubeEnv('SonarQube') { // ✅ Integrates with Jenkins Sonar Plugin
+                    sh """
+                            mvn -B sonar:sonar \
+                            -Dsonar.dependencyCheck.summarize=true \
+                            -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json \
+                            -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml \
+                            -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html \
+                            -Dsonar.projectKey=${SONAR_PROJECT_KEY}
+                        """
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    script {
+                        def qg = waitForQualityGate()
+                            if (qg.status != 'OK') {
+                                error "🚨 SonarQube Quality Gate failed! Build stopped."
+                            }
+                        }
+                    }
             }
         }
     }
