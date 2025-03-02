@@ -37,7 +37,7 @@ pipeline {
             steps {
                 echo "📊 Running SonarQube analysis..."
                 sh """
-                    mvn verify sonar:sonar \
+                    mvn -B sonar:sonar \
                         -Dsonar.dependencyCheck.summarize=true \
                         -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json \
                         -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml \
