@@ -54,7 +54,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                echo "📊 Running SonarQube analysis..."
+                echo "📊 Running Super SonarQube analysis..."
                 sh """
                     mvn -B sonar:sonar \
                         -Dsonar.dependencyCheck.summarize=true \
