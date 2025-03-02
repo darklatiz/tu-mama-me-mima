@@ -17,11 +17,13 @@ pipeline {
 
     stages {
         stage('Check PR or Branch') {
-            script {
-                if (env.CHANGE_ID) {
-                    echo "🔄 This is a Pull Request Build for PR #${env.CHANGE_ID}."
-                } else {
-                    echo "🌿 This is a branch build for ${env.BRANCH_NAME}."
+            steps {
+                script {
+                    if (env.CHANGE_ID) {
+                        echo "🔄 This is a Pull Request Build for PR #${env.CHANGE_ID}."
+                    } else {
+                        echo "🌿 This is a branch build for ${env.BRANCH_NAME}."
+                    }
                 }
             }
         }
