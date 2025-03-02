@@ -12,25 +12,16 @@ pipeline {
     }
 
     triggers {
-        genericTrigger(
-            causeString: 'Triggered by PR',
-            genericVariables: [
-                [key: 'ref', value: '$ref'],
-                [key: 'event_name', value: '$event_name']
-            ],
-            token: 'my-secret-token',
-            printContributedVariables: true,
-            printPostContent: true
-        )
+        githubPush()
     }
 
     stages {
         stage('Check PR') {
             when {
-                expression { env.GIT_BRANCH ==~ /origin\/PR-.*/ }
+                expression { env.CHANGE_ID != null }
             }
             steps {
-                echo "🔄 This is a Pull Request Build..."
+                echo "🔄 This is a Pull Request Build for PR #${env.CHANGE_ID}..."
             }
         }
 
