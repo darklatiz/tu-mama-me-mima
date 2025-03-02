@@ -30,7 +30,7 @@ pipeline {
                 expression { env.GIT_BRANCH ==~ /origin\/PR-.*/ }
             }
             steps {
-                echo "🔄 This is a Pull Request Build."
+                echo "🔄 This is a Pull Request Build..."
             }
         }
 
