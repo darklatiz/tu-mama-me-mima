@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         SONAR_PROJECT_KEY = "TuMamaMeMima"
+        GITHUB_TOKEN = credentials('github-token')
     }
 
     triggers {
