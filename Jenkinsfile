@@ -86,8 +86,8 @@ pipeline {
                     script {
                         def qg = waitForQualityGate()
                             if (qg.status != 'OK') {
-                                error "🚨 SonarQube Quality Gate failed! Build stopped."
                                 publishChecks conclusion: 'FAILURE', name: 'Sonar Quality Gate', summary: 'Sonar Quality Gate', text: 'Sonar Quality Gate', title: 'Sonar Quality Gate'
+                                error "🚨 SonarQube Quality Gate failed! Build stopped."
                             }
                         }
                     }
