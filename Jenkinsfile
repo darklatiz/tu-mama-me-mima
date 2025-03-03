@@ -8,8 +8,6 @@ pipeline {
     environment {
         SONAR_PROJECT_KEY = "TuMamaMeMima"
         GITHUB_TOKEN = credentials('github-token')
-        GITHUB_REPO = "darklatiz/tu-mama-me-mima"
-        GITHUB_SHA = "${env.GIT_COMMIT}"
     }
 
     triggers {
@@ -70,11 +68,6 @@ pipeline {
                     sh """
                         mvn sonar:sonar \
                         -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                        -Dsonar.pullrequest.key=${env.CHANGE_ID} \
-                        -Dsonar.pullrequest.branch=${env.BRANCH_NAME} \
-                        -Dsonar.pullrequest.base=main \
-                        -Dsonar.pullrequest.provider=github \
-                        -Dsonar.pullrequest.github.repository=${GITHUB_REPO}
                         -Dsonar.dependencyCheck.summarize=true \
                         -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json \
                         -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml \
