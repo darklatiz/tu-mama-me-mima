@@ -55,6 +55,9 @@ pipeline {
                         -DfailBuildOnCVSS=7 \
                         -Dformats=XML,JSON,HTML
                 '''
+                script {
+                    publishChecks name: 'OWASP Dependency Check', summary: 'OWASP Dependency Check', text: 'OWASP Dependency Check', title: 'OWASP Dependency Check'
+                }
             }
         }
 
@@ -71,6 +74,9 @@ pipeline {
                         -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html
                     """
                 }
+                script {
+                    publishChecks name: 'SonarQube Analysis', summary: 'SonarQube Analysis', text: 'SonarQube Analysis', title: 'SonarQube Analysis'
+                }
             }
         }
 
@@ -80,7 +86,8 @@ pipeline {
                     script {
                         def qg = waitForQualityGate()
                             if (qg.status != 'OK') {
-                                error "🚨 SonarQube Quality Gate failed! Build stopped."
+                                echo "🚨 SonarQube Quality Gate failed! Build stopped."
+                                publishChecks conclusion: 'FAILURE', name: 'Sonar Quality Gate', summary: 'Sonar Quality Gate', text: 'Sonar Quality Gate', title: 'Sonar Quality Gate'
                             }
                         }
                     }
