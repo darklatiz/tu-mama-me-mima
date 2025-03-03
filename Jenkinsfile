@@ -46,21 +46,17 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                echo "📊 Running NEW Super SonarQube analysis..."
+                echo "📊 Running SonarQube analysis..."
                 withSonarQubeEnv('SonarQube') {
-                    sonarqubeScanner(
-                        installationName: 'SonarQube',
-                        task: [
-                            additionalProperties: [
-                                'sonar.projectKey': SONAR_PROJECT_KEY,
-                                'sonar.dependencyCheck.summarize': true,
-                                'sonar.dependencyCheck.jsonReportPath': 'target/dependency-check-report.json',
-                                'sonar.dependencyCheck.xmlReportPath': 'target/dependency-check-report.xml',
-                                'sonar.dependencyCheck.htmlReportPath': 'target/dependency-check-report.html',
-                                'sonar.branch.name': "PR-${env.CHANGE_ID}"
-                            ]
-                        ]
-                    )
+                    sh """
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                        -Dsonar.dependencyCheck.summarize=true \
+                        -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json \
+                        -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml \
+                        -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html \
+                        -Dsonar.branch.name=PR-${env.CHANGE_ID}
+                    """
                 }
             }
         }
