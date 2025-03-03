@@ -30,17 +30,19 @@ pipeline {
         stage('Build') {
             steps {
                 echo "🛠️ Building the project with Maven..."
-                withChecks('Build') {
-                    sh 'mvn clean install -DskipTests'
+                sh 'mvn clean install -DskipTests'
+                script {
+                    publishChecks name: 'Building', summary: 'Building', text: 'The Text', title: 'Builder Building'
                 }
             }
         }
 
         stage('Testing') {
             steps {
-                withChecks('Tests') {
-                    echo "🧪 Running unit and integration tests..."
-                    sh 'mvn test'
+                echo "🧪 Running unit and integration tests..."
+                sh 'mvn test'
+                script {
+                    publishChecks name: 'Testing', summary: 'Unit Testing', text: 'The Text', title: 'Unit testing'
                 }
             }
         }
