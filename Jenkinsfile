@@ -57,7 +57,7 @@ pipeline {
                                 'sonar.dependencyCheck.jsonReportPath': 'target/dependency-check-report.json',
                                 'sonar.dependencyCheck.xmlReportPath': 'target/dependency-check-report.xml',
                                 'sonar.dependencyCheck.htmlReportPath': 'target/dependency-check-report.html',
-
+                                'sonar.branch.name': "PR-${env.CHANGE_ID}"
                             ]
                         ]
                     )
