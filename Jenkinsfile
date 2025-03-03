@@ -47,15 +47,20 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 echo "📊 Running NEW Super SonarQube analysis..."
-                withSonarQubeEnv('SonarQube') { // ✅ Integrates with Jenkins Sonar Plugin
-                    sh """
-                            mvn -B sonar:sonar \
-                            -Dsonar.dependencyCheck.summarize=true \
-                            -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json \
-                            -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml \
-                            -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html \
-                            -Dsonar.projectKey=${SONAR_PROJECT_KEY}
-                        """
+                withSonarQubeEnv('SonarQube') {
+                    sonarqubeScanner(
+                        installationName: 'SonarQube',
+                        task: [
+                            additionalProperties: [
+                                'sonar.projectKey': SONAR_PROJECT_KEY,
+                                'sonar.dependencyCheck.summarize': true,
+                                'sonar.dependencyCheck.jsonReportPath': 'target/dependency-check-report.json',
+                                'sonar.dependencyCheck.xmlReportPath': 'target/dependency-check-report.xml',
+                                'sonar.dependencyCheck.htmlReportPath': 'target/dependency-check-report.html',
+
+                            ]
+                        ]
+                    )
                 }
             }
         }
