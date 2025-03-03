@@ -54,8 +54,7 @@ pipeline {
                         -Dsonar.dependencyCheck.summarize=true \
                         -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json \
                         -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml \
-                        -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html \
-                        -Dsonar.branch.name=PR-${env.CHANGE_ID}
+                        -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html
                     """
                 }
             }
