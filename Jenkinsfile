@@ -76,11 +76,11 @@ pipeline {
 
     post {
         success {
-            setGitHubPullRequestStatus context: 'Jenkins/PR', status: 'SUCCESS', description: '✅ Pipeline passed!'
+            setGitHubPullRequestStatus context: 'Jenkins/PR', state: 'SUCCESS', message: '✅ Pipeline passed!'
             echo "✅ Pipeline executed successfully!"
         }
         failure {
-            setGitHubPullRequestStatus context: 'Jenkins/PR', status: 'FAILURE', description: '❌ Pipeline failed!'
+            setGitHubPullRequestStatus context: 'Jenkins/PR', state: 'FAILURE', message: '❌ Pipeline failed!'
             echo "❌ Build failed! Check the logs."
         }
     }
