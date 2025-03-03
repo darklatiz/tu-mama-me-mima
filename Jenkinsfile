@@ -30,6 +30,11 @@ pipeline {
         stage('Build & Test') {
             steps {
                 echo "🛠️ Building the project with Maven..."
+                script {
+                    publishChecks name: 'Building and testing', status: 'IN_PROGRESS',
+                        title: 'Build, Test, and Publish',
+                        summary: 'Building...'
+                }
                 sh 'mvn clean install'
             }
         }
