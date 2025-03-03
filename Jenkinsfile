@@ -78,11 +78,9 @@ pipeline {
     post {
         success {
             echo "✅ Pipeline executed successfully!"
-            setGitHubPullRequestStatus context: 'SUCCESS', message: '✅ Pipeline executed successfully!', state: 'SUCCESS'
         }
         failure {
             echo "❌ Build failed! Check the logs."
-            setGitHubPullRequestStatus context: 'FAILURE', message: '❌ Pipeline failed!', state: 'FAILURE'
         }
     }
 }
