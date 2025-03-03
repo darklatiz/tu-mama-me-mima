@@ -27,15 +27,21 @@ pipeline {
             }
         }
 
-        stage('Build & Test') {
+        stage('Build') {
             steps {
                 echo "🛠️ Building the project with Maven..."
-                script {
-                    publishChecks name: 'Building and testing', status: 'IN_PROGRESS',
-                        title: 'Build, Test, and Publish',
-                        summary: 'Building...'
+                withChecks('Build') {
+                    sh 'mvn clean install -DskipTests'
                 }
-                sh 'mvn clean install'
+            }
+        }
+
+        stage('Testing') {
+            steps {
+                withChecks('Tests') {
+                    echo "🧪 Running unit and integration tests..."
+                    sh 'mvn test'
+                }
             }
         }
 
