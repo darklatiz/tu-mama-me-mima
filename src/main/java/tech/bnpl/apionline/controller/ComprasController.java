@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tech.bnpl.apionline.controller.exception.EntityNotFoundException;
 import tech.bnpl.apionline.controller.exception.LineaCreditoException;
 import tech.bnpl.apionline.controller.mapper.BNPLResponseMapper;
-import tech.bnpl.apionline.model.Cliente;
 import tech.bnpl.apionline.model.request.CompraRequest;
 import tech.bnpl.apionline.model.response.ClienteResponse;
 import tech.bnpl.apionline.service.ComprasService;
