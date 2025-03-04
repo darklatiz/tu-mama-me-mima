@@ -41,7 +41,6 @@ public class ClientesController {
     @PostMapping
     public ResponseEntity<ClienteResponse> recargarCache(@RequestBody @Valid ClienteRequest clienteRequest) throws LineaCreditoException, EntityNotFoundException {
         Cliente cliente = clienteService.createCliente(clienteRequest);
-        System.out.println("Vulnerabilidad introducida");
         log.info("Cliente: {} - {}", cliente.getId(), cliente.getNombre());
         return new ResponseEntity<>(bnplResponseMapper.mapResponse(cliente), HttpStatus.CREATED);
     }
